@@ -13,22 +13,22 @@ public class FastPath {
     }
 
     public static String format2Decimals(double x) {
-        return format(x, Signs.MINUS, false);
+        return format(x, Signs.MINUS, Fractionals.TWO);
     }
 
     public static String format2Decimals(double x, Signs signs) {
-        return format(x, signs, false);
+        return format(x, signs, Fractionals.TWO);
     }
 
     public static String format012Decimals(double x) {
-        return format(x, Signs.MINUS, true);
+        return format(x, Signs.MINUS, Fractionals.ZERO_ONE_TWO);
     }
 
     public static String format012Decimals(double x, Signs signs) {
-        return format(x, signs, true);
+        return format(x, signs, Fractionals.ZERO_ONE_TWO);
     }
 
-    private static String format(double x, Signs signs, boolean hideTrailingZerosAndComma) {
+    private static String format(double x, Signs signs, Fractionals fractionals) {
         char sign = signs.sign(x);
         x = Math.abs(x);
         if (!(x < 0.0 - Long.MIN_VALUE)) return Double.toString(x); // "not less" handles NaN correctly
@@ -56,13 +56,9 @@ public class FastPath {
         }
 
         // trailing
-        int right = chars.length - 1;
-        if (hideTrailingZerosAndComma) {
-            while (chars[right] == '0') --right;
-            if (chars[right] == ',') --right;
-        }
+        int end = fractionals.cut(chars);
 
         // done
-        return new String(chars, left, right + 1 - left);
+        return new String(chars, left, end - left);
     }
 }
