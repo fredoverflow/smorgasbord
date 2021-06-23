@@ -13,49 +13,23 @@ public class FastPath {
     }
 
     public static String format2Decimals(double x) {
-        return format(x, SignRule.MINUS_EMPTY, false);
+        return format(x, Signs.MINUS, false);
     }
 
-    public static String format2Decimals(double x, SignRule signRule) {
-        return format(x, signRule, false);
+    public static String format2Decimals(double x, Signs signs) {
+        return format(x, signs, false);
     }
 
     public static String format012Decimals(double x) {
-        return format(x, SignRule.MINUS_EMPTY, true);
+        return format(x, Signs.MINUS, true);
     }
 
-    public static String format012Decimals(double x, SignRule signRule) {
-        return format(x, signRule, true);
+    public static String format012Decimals(double x, Signs signs) {
+        return format(x, signs, true);
     }
 
-    public enum SignRule {
-        MINUS_EMPTY {
-            @Override
-            char sign(double x) {
-                return (x < 0) ? '-' : 0;
-            }
-        }, MINUS_PLUS {
-            @Override
-            char sign(double x) {
-                return (x < 0) ? '-' : '+';
-            }
-        }, MINUS_PLUS_EMPTY {
-            @Override
-            char sign(double x) {
-                return (x < 0) ? '-' : (x > 0) ? '+' : 0;
-            }
-        }, MINUS_PLUS_SPACE {
-            @Override
-            char sign(double x) {
-                return (x < 0) ? '-' : (x > 0) ? '+' : ' ';
-            }
-        };
-
-        abstract char sign(double x);
-    }
-
-    private static String format(double x, SignRule signRule, boolean hideTrailingZerosAndComma) {
-        char sign = signRule.sign(x);
+    private static String format(double x, Signs signs, boolean hideTrailingZerosAndComma) {
+        char sign = signs.sign(x);
         x = Math.abs(x);
         if (!(x < 0.0 - Long.MIN_VALUE)) return Double.toString(x); // "not less" handles NaN correctly
 
@@ -77,7 +51,7 @@ public class FastPath {
         } while (integer != 0);
 
         // sign
-        if (sign != 0) {
+        if (sign != Signs.NONE) {
             chars[--left] = sign;
         }
 
