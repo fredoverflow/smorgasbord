@@ -2,11 +2,13 @@ package ieee754;
 
 public enum Fractionals {
     TWO {
+        // "123,00"
         @Override
         int cut(char[] chars) {
             return chars.length;
         }
     }, ONE_TWO {
+        // "123,0"
         @Override
         int cut(char[] chars) {
             int right = chars.length - 1;
@@ -15,6 +17,7 @@ public enum Fractionals {
             return right + 1;
         }
     }, ZERO_ONE_TWO {
+        // "123"
         @Override
         int cut(char[] chars) {
             int right = chars.length - 1;
